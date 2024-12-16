@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS td_friends(
+    user_id INT PRIMARY KEY
+)

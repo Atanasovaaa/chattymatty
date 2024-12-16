@@ -47,4 +47,17 @@ public class UserController {
                 .withMessage("User can not be added")
                 .build();
     }
+
+    @PostMapping("/users/add-friend")
+    public ResponseEntity<?> addFriend(@RequestBody User user) {
+        if(this.userService.addFriend(user)) {
+            return AppResponse.success()
+                    .withMessage("New friend added")
+                    .build();
+        }
+
+        return AppResponse.error()
+                .withMessage("Something went wrong")
+                .build();
+    }
 }

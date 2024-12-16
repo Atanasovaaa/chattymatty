@@ -1,0 +1,5 @@
+2024-12-16 23:52:56.694916+02:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS td_friends(\000a    user_id INT PRIMARY KEY,\000a[*])"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS td_friends(
+    user_id INT PRIMARY KEY,
+) [42001-232]

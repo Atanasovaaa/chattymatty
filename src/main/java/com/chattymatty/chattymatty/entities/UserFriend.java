@@ -6,15 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "td_users")
+@Table(name = "td_friends")
 @Getter
 @Setter
 @NoArgsConstructor
-public class User extends BaseEntity {
+public class UserFriend {
 
-    @Column(name = "username")
-    private String username;
+    @Id
+    @Column(name = "user_id")
+    private int userId;
 
-    @Column(name = "full_name")
-    private String fullName;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
