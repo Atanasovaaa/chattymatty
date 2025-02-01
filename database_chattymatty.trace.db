@@ -1,5 +1,12 @@
-2024-12-16 23:52:56.694916+02:00 jdbc[4]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS td_friends(\000a    user_id INT PRIMARY KEY,\000a[*])"; expected "identifier"; SQL statement:
-CREATE TABLE IF NOT EXISTS td_friends(
-    user_id INT PRIMARY KEY,
-) [42001-232]
+2025-01-29 23:08:11.655251+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHAT_MESSAGES" not found; SQL statement:
+select m1_0.id,m1_0.channel_id,m1_0.content,m1_0.is_active,m1_0.receiver_id,m1_0.sender_id,m1_0.timestamp from chat_messages m1_0 where m1_0.sender_id=? or m1_0.receiver_id=? [42102-232]
+2025-01-29 23:14:57.640564+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHAT_MESSAGES" not found; SQL statement:
+insert into chat_messages (channel_id,content,is_active,receiver_id,sender_id,timestamp,id) values (?,?,?,?,?,?,default) [42102-232]
+2025-01-29 23:32:22.065461+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHANNEL_USERS" not found; SQL statement:
+insert into channel_users (channel_id,user_id) values (?,?) [42102-232]
+2025-01-29 23:32:28.440436+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHANNEL_USERS" not found; SQL statement:
+insert into channel_users (channel_id,user_id) values (?,?) [42102-232]
