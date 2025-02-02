@@ -7,14 +7,12 @@ import com.chattymatty.chattymatty.repositories.ChannelRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class ChannelService {
 
     private ChannelRepository channelRepo;
-
     private UserService userService;
 
     public ChannelService(ChannelRepository channelRepo, UserService userService) {
@@ -31,24 +29,30 @@ public class ChannelService {
         return this.channelRepo.save(channel);
     }
 
-    public void addUserToChannel(int channelId, int userId) {
+    public boolean addUserToChannel(int channelId, int userId) {
         Channel channel = getChannelById(channelId);
         User user = userService.getUserById(userId);
-        channel.getUsers().add(user);
-        this.channelRepo.save(channel);
+        if(channel != null && user != null) {
+            channel.getUsers().add(user);
+            this.channelRepo.save(channel);
+            return true;
+        }
+       return false;
     }
 
     public Channel getChannelById(int id) {
         return channelRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Channel not found"));
     }
 
-    public void deleteChannel(int channelId, int ownerId) {
+    public boolean deleteChannel(int channelId, int ownerId) {
         Channel channel = getChannelById(channelId);
-        if (!(channel.getOwner().getId() == ownerId)) {
-            throw new IllegalArgumentException("Only owner can delete the channel");
+        if (channel.getOwner().getId() == ownerId) {
+            channel.setIsActive(0);
+            this.channelRepo.save(channel);
+            return true;
         }
-        channel.setIsActive(0);
-        this.channelRepo.save(channel);
+
+        return false;
     }
 
     public List<ChannelDto> getChannelsForUser(int userId) {
@@ -60,16 +64,16 @@ public class ChannelService {
                 .collect(Collectors.toList());
     }
 
-    public void renameChannel(int channelId, String newName, int userId) {
+    public boolean renameChannel(int channelId, String newName, int userId) {
         Channel channel = getChannelById(channelId);
         User user = userService.getUserById(userId);
 
         if (channel.getOwner().equals(user) || channel.getAdministrators().contains(user)) {
             channel.setName(newName);
             this.channelRepo.save(channel);
-        } else {
-            throw new IllegalArgumentException("Only OWNER or ADMIN can rename the channel");
+            return true;
         }
-    }
 
+        return false;
+    }
 }

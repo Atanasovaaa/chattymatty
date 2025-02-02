@@ -20,16 +20,20 @@ public class MessageService {
         this.channelService = channelService;
     }
 
-    public void sendDirectMessage(int senderId, int receiverId, String content) {
+    public boolean sendDirectMessage(int senderId, int receiverId, String content) {
         User sender = userService.getUserById(senderId);
         User receiver = userService.getUserById(receiverId);
 
-        Message message = new Message();
-        message.setSender(sender);
-        message.setReceiver(receiver);
-        message.setContent(content);
+        if(sender != null && receiver != null) {
+            Message message = new Message();
+            message.setSender(sender);
+            message.setReceiver(receiver);
+            message.setContent(content);
 
-        this.messageRepo.save(message);
+            this.messageRepo.save(message);
+            return true;
+        }
+        return false;
     }
 
     public List<Message> getDirectMessagesBetweenUsers(int userId1, int userId2) {
@@ -42,19 +46,20 @@ public class MessageService {
                 .toList();
     }
 
-    public void sendChannelMessage(int senderId, int channelId, String content) {
+    public boolean sendChannelMessage(int senderId, int channelId, String content) {
         User sender = userService.getUserById(senderId);
         Channel channel = channelService.getChannelById(channelId);
 
-        if(!channel.getUsers().contains(sender)) {
-            throw new IllegalArgumentException("Sender is not part of the channel");
+        if(channel.getUsers().contains(sender)) {
+            Message message = new Message();
+            message.setSender(sender);
+            message.setChannel(channel);
+            message.setContent(content);
+            this.messageRepo.save(message);
+            return true;
         }
 
-        Message message = new Message();
-        message.setSender(sender);
-        message.setChannel(channel);
-        message.setContent(content);
-        this.messageRepo.save(message);
+        return false;
     }
 
     public List<Message> getMessagesForChannel(int channelId) {

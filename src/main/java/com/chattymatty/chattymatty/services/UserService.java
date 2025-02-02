@@ -76,9 +76,15 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteUser(int id) {
+    public boolean deleteUser(int id) {
         User user = getUserById(id);
-        user.setIsActive(0);
-        this.userRepo.save(user);
+
+        if(user != null) {
+            user.setIsActive(0);
+            this.userRepo.save(user);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -1,9 +1,7 @@
 package com.chattymatty.chattymatty.dto;
 
 import com.chattymatty.chattymatty.entities.Channel;
-import com.chattymatty.chattymatty.entities.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter

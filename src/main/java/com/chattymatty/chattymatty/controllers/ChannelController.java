@@ -10,11 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/api/channels")
 public class ChannelController {
+
     @Autowired
     private ChannelService channelService;
     private UserService userService;
@@ -51,20 +50,47 @@ public class ChannelController {
     }
 
     @PostMapping("/{channelId}/users/{userId}")
-    public ResponseEntity<String> addUserToChannel(@PathVariable int channelId, @PathVariable int userId) {
-        channelService.addUserToChannel(channelId, userId);
-        return ResponseEntity.ok("User added to the channel successfully");
+    public ResponseEntity<?> addUserToChannel(@PathVariable int channelId, @PathVariable int userId) {
+        var response = channelService.addUserToChannel(channelId, userId);
+
+        if(response) {
+            return AppResponse.success()
+                    .withMessage("User added to the channel successfully")
+                    .build();
+        }
+
+        return AppResponse.error()
+                .withMessage("User can not be added.")
+                .build();
+
     }
 
     @PatchMapping("/{channelId}/name")
-    public ResponseEntity<String> renameChannel(@PathVariable int channelId, @RequestParam String newName, @RequestParam int ownerId) {
-        channelService.renameChannel(channelId, newName, ownerId);
-        return ResponseEntity.ok("Channel renamed successfully");
+    public ResponseEntity<?> renameChannel(@PathVariable int channelId, @RequestParam String newName, @RequestParam int ownerId) {
+        var response = channelService.renameChannel(channelId, newName, ownerId);
+        if(response) {
+            return AppResponse.success()
+                    .withMessage("Channel successfully renamed")
+                    .build();
+        }
+        return AppResponse.error()
+                .withMessage("Only OWNER and ADMIN can rename the channel")
+                .build();
+
     }
 
     @DeleteMapping("/{channelId}")
-    public ResponseEntity<String> deleteChannel(@PathVariable int channelId, @RequestParam int ownerId) {
-        channelService.deleteChannel(channelId, ownerId);
-        return ResponseEntity.ok("Channel deleted successfully");
+    public ResponseEntity<?> deleteChannel(@PathVariable int channelId, @RequestParam int ownerId) {
+        var response = channelService.deleteChannel(channelId, ownerId);
+
+        if(response) {
+            return AppResponse.success()
+                    .withMessage("Cnahhel deleted successfuly")
+                    .build();
+        }
+
+        return AppResponse.error()
+                .withMessage("Only the OWNER can delete the channel")
+                .build();
     }
 }
